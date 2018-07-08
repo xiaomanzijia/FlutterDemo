@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+*~
+.DS_Store
+/tools
+build/
+flutter_app_demo_2.iml
+flutter_app_demo_2_android.iml
+.idea/
+android/.gradle/
+android/gradle/
+android/gradlew
+android/gradlew.bat

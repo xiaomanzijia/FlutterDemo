@@ -5,7 +5,10 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:isolate';
 
-class _SampleAppPageState extends State<SampleAppPage> {
+class _SampleAppPageState extends State<SampleAppPage> with WidgetsBindingObserver {
+
+  AppLifecycleState _lastLifecyleState;
+
   List widgets = [];
 
   showLoadingDialog() {
@@ -21,18 +24,39 @@ class _SampleAppPageState extends State<SampleAppPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Sample App"),
-        ),
-        body: getBody());
+    if(_lastLifecyleState == null) {
+      return new Text("This widget has not observed any lifecycle changes", textDirection: TextDirection.ltr);
+    } else {
+      return new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Sample App"),
+          ),
+          body: getBody());
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     loadData();
   }
+
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _lastLifecyleState = state;
+    });
+  }
+
+
 
   loadData() async {
     ReceivePort receivePort = new ReceivePort();
@@ -91,6 +115,8 @@ class _SampleAppPageState extends State<SampleAppPage> {
         padding: new EdgeInsets.all(10.0),
         child: new Text("Row ${widgets[position]["title"]}"));
   }
+
+
 }
 
 void main() {

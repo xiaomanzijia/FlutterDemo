@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../api/Api.dart';
 import '../utils/NetUtils.dart';
 import 'dart:convert';
+import 'NewsDetailPage.dart';
 
 class NewsListPage extends StatefulWidget {
   @override
@@ -141,7 +142,10 @@ class NewsListPageState extends State<NewsListPage> {
     );
     return new InkWell(
       child: row,
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(new MaterialPageRoute(
+            builder: (ctx) => new NewsDetailPage(id: itemData['detailUrl'])));
+      },
     );
   }
 

@@ -1,8 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../api/Api.dart';
+import '../constants/Constants.dart';
+import '../pages/NewsDetailPage.dart';
 import '../utils/NetUtils.dart';
-import 'dart:convert';
-import 'NewsDetailPage.dart';
+import '../widgets/CommonEndLine.dart';
 
 class NewsListPage extends StatefulWidget {
   @override
@@ -13,14 +16,33 @@ class NewsListPageState extends State<NewsListPage> {
   var listData;
   var curPage = 1;
   var listTotalSize = 0;
+  ScrollController _controller = new ScrollController();
 
   TextStyle titleTextStyle = new TextStyle(fontSize: 15.0);
   TextStyle subTitleStyle =
       new TextStyle(color: const Color(0xFFB5BDC0), fontSize: 12.0);
 
+  NewsListPageState() {
+    _controller.addListener(() {
+      var maxScroll = _controller.position.maxScrollExtent;
+      var pixels = _controller.position.pixels;
+      if (maxScroll == pixels && listData.length < listTotalSize) {
+        print("load more...");
+        curPage++;
+        getNewsList(true);
+      }
+    });
+  }
+
   @override
   void initState() {
     getNewsList(false);
+  }
+
+  Future<Null> _pullToRefresh() async {
+    curPage = 1;
+    getNewsList(false);
+    return null;
   }
 
   @override
@@ -31,14 +53,19 @@ class NewsListPageState extends State<NewsListPage> {
       );
     } else {
       Widget listView = new ListView.builder(
-          itemCount: listData.length * 2,
-          itemBuilder: (context, i) => renderRow(i));
-      return listView;
+        itemCount: listData.length,
+        itemBuilder: (context, i) => renderRow(i),
+        controller: _controller,
+      );
+      return new RefreshIndicator(child: listView, onRefresh: _pullToRefresh);
     }
   }
 
   renderRow(int i) {
     var itemData = listData[i];
+    if (itemData is String && itemData == Constants.END_LINE_TAG) {
+      return new CommonEndLine();
+    }
     //标题
     var titleRow = new Row(
       children: <Widget>[
@@ -167,7 +194,9 @@ class NewsListPageState extends State<NewsListPage> {
               List list1 = new List();
               list1.addAll(listData);
               list1.addAll(_listData);
-              if (list1.length >= listTotalSize) {}
+              if (list1.length >= listTotalSize) {
+                list1.add(Constants.END_LINE_TAG);
+              }
               listData = list1;
             }
           });

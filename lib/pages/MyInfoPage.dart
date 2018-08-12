@@ -60,21 +60,21 @@ class MyInfoPageState extends State<MyInfoPage> {
             children: <Widget>[
               userAvatar == null
                   ? new Image.asset(
-                      "images/ic_avatar_default.png",
-                      width: 60.0,
-                    )
+                "images/ic_avatar_default.png",
+                width: 60.0,
+              )
                   : new Container(
-                      width: 60.0,
-                      height: 60.0,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.transparent,
-                          image: new DecorationImage(
-                              image: new NetworkImage(userAvatar),
-                              fit: BoxFit.cover),
-                          border:
-                              new Border.all(color: Colors.white, width: 2.0)),
-                    ),
+                width: 60.0,
+                height: 60.0,
+                decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.transparent,
+                    image: new DecorationImage(
+                        image: new NetworkImage(userAvatar),
+                        fit: BoxFit.cover),
+                    border:
+                    new Border.all(color: Colors.white, width: 2.0)),
+              ),
               new Text(userName == null ? "点击头像登录" : userName,
                   style: new TextStyle(color: Colors.white, fontSize: 16.0))
             ],
@@ -116,5 +116,32 @@ class MyInfoPageState extends State<MyInfoPage> {
   }
 
   //ITEM点击事件
-  void _handleListItemClick(String title) {}
+  void _handleListItemClick(String title) {
+    _showLoginDialog();
+  }
+
+  void _showLoginDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return new AlertDialog(
+            title: new Text('提示'),
+            content: new Text('没有登录，现在去登录吗？'),
+            actions: <Widget>[
+              new FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child:
+                  new Text('取消', style: new TextStyle(color: Colors.red))),
+              new FlatButton(onPressed: () {
+                Navigator.of(context).pop();
+                print("去登录");
+              },
+                  child: new Text(
+                    '确定', style: new TextStyle(color: Colors.blue),))
+            ],
+          );
+        });
+  }
 }

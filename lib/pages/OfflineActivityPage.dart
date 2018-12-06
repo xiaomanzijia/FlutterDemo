@@ -1,6 +1,151 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_demo_2/api/Api.dart';
+import 'package:flutter_app_demo_2/utils/NetUtils.dart';
+import 'dart:convert';
 
-class OfflineActivityPage extends StatelessWidget {
+class OfflineActivityPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new OfflineActivityPageState();
+  }
+}
+
+class OfflineActivityPageState extends State<OfflineActivityPage> {
+  String eventTypeLatest = 'latest';
+  String eventTypeYch = 'ych';
+  String eventTypeRec = 'recommend';
+  int curPage = 1;
+
+  TextStyle titleTextStyle = new TextStyle(color: Colors.black, fontSize: 18.0);
+
+  List recData, latestData, ychData;
+
+  @override
+  void initState() {
+    super.initState();
+    getData(eventTypeRec);
+    getData(eventTypeLatest);
+    getData(eventTypeYch);
+  }
+
+  void getData(String type) {
+    String url = Api.EVENT_LIST;
+    url += "$type?pageIndex=$curPage&pageSize=5";
+    NetUtils.get(url, (data) {
+      if (data != null) {
+        var obj = json.decode(data);
+        if (obj != null && obj['code'] == 0) {
+          print(obj);
+          setState(() {
+            if (type == eventTypeRec) {
+              recData = obj['msg'];
+            } else if (type == eventTypeLatest) {
+              latestData = obj['msg'];
+            } else {
+              ychData = obj['msg'];
+            }
+          });
+        }
+      }
+    });
+  }
+
+  Widget getRecBody() {
+    if (recData == null) {
+      return new Center(child: new CircularProgressIndicator());
+    } else if (recData.length == 0) {
+      return new Center(child: new Text("暂无数据"));
+    } else {
+      return new ListView.builder(
+          itemBuilder: _renderRecRow, itemCount: recData.length);
+    }
+  }
+
+  Widget getLatestBody() {
+    if (latestData == null) {
+      return new Center(child: new CircularProgressIndicator());
+    } else if (latestData.length == 0) {
+      return new Center(child: new Text("暂无数据"));
+    } else {
+      return new ListView.builder(
+          itemBuilder: _renderLatestRow, itemCount: latestData.length);
+    }
+  }
+
+  Widget getYchBody() {
+    if (ychData == null) {
+      return new Center(child: new CircularProgressIndicator());
+    } else if (ychData.length == 0) {
+      return new Center(child: new Text("暂无数据"));
+    } else {
+      return new ListView.builder(
+          itemBuilder: _renderYchRow, itemCount: ychData.length);
+    }
+  }
+
+  Widget _renderRecRow(BuildContext ctx, int i) {
+    Map itemData = recData[i];
+    return new InkWell(
+      child: getCard(itemData),
+      onTap: () {
+        _showDetail(itemData['detailUrl']);
+      },
+    );
+  }
+
+  Widget _renderLatestRow(BuildContext ctx, int i) {
+    Map itemData = latestData[i];
+    return new InkWell(
+      child: getCard(itemData),
+      onTap: () {
+        _showDetail(itemData['detailUrl']);
+      },
+    );
+  }
+
+  Widget _renderYchRow(BuildContext ctx, int i) {
+    Map itemData = ychData[i];
+    return new InkWell(
+      child: getCard(itemData),
+      onTap: () {
+        _showDetail(itemData['detailUrl']);
+      },
+    );
+  }
+
+  Widget getCard(Map itemData) {
+    return new Card(
+      child: new Column(
+        children: <Widget>[
+          new Image.network(itemData['cover'], fit: BoxFit.cover),
+          new Container(
+              margin: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+              alignment: Alignment.centerLeft,
+              child: new Text(
+                itemData['title'],
+                style: titleTextStyle,
+              )),
+          new Container(
+            margin: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+            child: new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new Text(itemData['authorName']),
+                  flex: 1,
+                ),
+                new Text(itemData['timeStr'])
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showDetail(itemData) {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (ctx) {}));
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -27,27 +172,9 @@ class OfflineActivityPage extends StatelessWidget {
               ),
               body: new TabBarView(children: <Widget>[
                 getRecBody(),
-                getLastedtBody(),
+                getLatestBody(),
                 getYchBody()
               ]),
             )));
-  }
-
-  Widget getRecBody() {
-    return new Center(
-      child: new Text("强力推荐"),
-    );
-  }
-
-  Widget getLastedtBody() {
-    return new Center(
-      child: new Text("最新活动"),
-    );
-  }
-
-  Widget getYchBody() {
-    return new Center(
-      child: new Text("源创会"),
-    );
   }
 }

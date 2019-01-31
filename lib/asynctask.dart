@@ -1,9 +1,10 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-
-import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
+
+import 'package:flutter/material.dart';
+// ignore: uri_does_not_exist
+import 'package:http/http.dart' as http;
 
 class _SampleAppPageState extends State<SampleAppPage> with WidgetsBindingObserver {
 

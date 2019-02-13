@@ -30,7 +30,7 @@ class _SampleAppPageState extends State<SampleAppPage> with WidgetsBindingObserv
     } else {
       return new Scaffold(
           appBar: new AppBar(
-            title: new Text("Sample App"),
+            title: new Text("Sample App Test Github"),
           ),
           body: getBody());
     }

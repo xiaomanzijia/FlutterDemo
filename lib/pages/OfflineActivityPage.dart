@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_demo_2/api/Api.dart';
-import 'package:flutter_app_demo_2/utils/NetUtils.dart';
+import 'package:flutter_app_demo/api/Api.dart';
+import 'package:flutter_app_demo/utils/NetUtils.dart';
 import 'dart:convert';
 
 class OfflineActivityPage extends StatefulWidget {

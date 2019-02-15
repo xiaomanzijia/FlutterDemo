@@ -4,19 +4,33 @@ import 'package:flutter_app_demo/fluttergo/model/cat.dart';
 
 // ignore: non_abstract_class_inherits_abstract_member_one
 class WidgetPage extends StatefulWidget {
+  final db;
+  final CatControlModel catModel;
+
+  WidgetPage(this.db)
+      : catModel = new CatControlModel(),
+        super();
+
   @override
   State<StatefulWidget> createState() {
-    return new SecondPageState();
+    return new SecondPageState(catModel);
   }
 }
 
 // ignore: non_abstract_class_inherits_abstract_member_one
 class SecondPageState extends State<WidgetPage> {
   List<Cat> categories = [];
+  CatControlModel catModel;
+
+  SecondPageState(this.catModel) : super();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
+    renderCats();
   }
 
   @override
@@ -40,5 +54,15 @@ class SecondPageState extends State<WidgetPage> {
     return new ListView(
       children: titles,
     );
+  }
+
+  void renderCats() {
+    catModel.getList().then((List data) {
+      if (data.isNotEmpty) {
+        setState(() {
+          categories = data;
+        });
+      }
+    });
   }
 }

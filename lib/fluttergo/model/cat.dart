@@ -1,3 +1,5 @@
+import 'package:flutter_app_demo/fluttergo/utils/sql.dart';
+
 abstract class CatInterface {
   int get id;
 
@@ -21,7 +23,7 @@ class Cat implements CatInterface {
   int depth;
   int parentId;
 
-  Cat(this.id, this.name, this.desc, this.depth, this.parentId);
+  Cat({this.id, this.name, this.desc, this.depth, this.parentId});
 
   Cat.formJSON(Map json)
       : id = json['id'],
@@ -58,6 +60,26 @@ class Cat implements CatInterface {
 
     return condition;
   }
+}
 
+class CatControlModel {
+  final String table = 'cat';
+  Sql sql;
 
+  CatControlModel() {
+    sql = Sql.setTab(table);
+  }
+
+  // 获取Cat不同深度与parent的列表
+  Future<List<Cat>> getList([Cat cat]) async {
+    if (cat == null) {
+      cat = new Cat(depth: 1, parentId: 0);
+    }
+    print("cat in getList ${cat.toMap()}");
+    List listJson = await sql.getByCondition(conditions: cat.toSqlConditon());
+    List<Cat> cats = listJson.map((json) {
+      return new Cat.formJSON(json);
+    }).toList();
+    return cats;
+  }
 }

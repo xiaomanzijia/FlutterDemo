@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_demo/fluttergo/routers/app.dart';
+import 'package:flutter_app_demo/fluttergo/utils/provider.dart';
 import 'package:flutter_app_demo/fluttergo/views/first_page/first_page.dart';
 import 'package:flutter_app_demo/fluttergo/views/widget_page/widget_page.dart';
 
@@ -48,13 +49,14 @@ class _MyHomePageState extends State<AppPage>
 
   @override
   Widget build(BuildContext context) {
+    var db = Provider.db;
     return new Scaffold(
       appBar: new AppBar(title: buildSearchInput(context)),
       body: new TabBarView(controller: controller, children: <Widget>[
         new FirstPage(),
-        new WidgetPage(),
-        new WidgetPage(),
-        new WidgetPage()
+        new WidgetPage(db),
+        new FirstPage(),
+        new FirstPage(),
       ]),
       bottomNavigationBar: Material(
         color: const Color(0xFFF0EEEF),

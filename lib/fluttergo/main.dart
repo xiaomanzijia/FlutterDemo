@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_app_demo/fluttergo/routers/app.dart';
+import 'package:flutter_app_demo/fluttergo/utils/provider.dart';
 import 'views/home.dart';
 
 const int ThemeColor = 0xFFC91B3A;
+
+var db;
 
 class MyApp extends StatelessWidget {
   MyApp() {
@@ -38,7 +41,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void main() {
+void main() async {
   //TODO 初始化sp&db&provider
+  final provider = new Provider();
+  await provider.init(true);
+  db = Provider.db;
   runApp(new MyApp());
 }

@@ -57,7 +57,7 @@ class _CateCardState extends State<CateCard> {
                     ),
                   ),
                 ),
-                _buildWidgetContainer(),
+//                _buildWidgetContainer(),
               ],
             ),
           )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_demo/fluttergo/components/widget_item_container.dart';
 import 'package:flutter_app_demo/fluttergo/model/cat.dart';
 
 class CateCard extends StatefulWidget {
@@ -57,7 +58,7 @@ class _CateCardState extends State<CateCard> {
                     ),
                   ),
                 ),
-//                _buildWidgetContainer(),
+                _buildWidgetContainer(),
               ],
             ),
           )
@@ -84,5 +85,16 @@ class _CateCardState extends State<CateCard> {
     if (this._firstChildList.length == 0) {
       return Container();
     }
+    return Container(
+      padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/paimaiLogo.png'),
+              alignment: Alignment.bottomRight)),
+      child: WidgetItemContainer(
+          categories: this._firstChildList,
+          columnCount: 3,
+          isWidgetPoint: false),
+    );
   }
 }

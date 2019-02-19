@@ -80,6 +80,7 @@ class CatControlModel {
     List<Cat> cats = listJson.map((json) {
       return new Cat.formJSON(json);
     }).toList();
+    print('cat int getList ${cats.toString()}');
     return cats;
   }
 }

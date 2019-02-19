@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_demo/fluttergo/components/widget_item.dart';
+import 'package:flutter_app_demo/fluttergo/widget/index.dart';
 
 class WidgetItemContainer extends StatelessWidget {
   final int columnCount; //一行几个
   final List<dynamic> categories;
   final bool isWidgetPoint;
+
+  final List widgetDemosList = new WidgetDemoList().getDemos();
 
   WidgetItemContainer(
       {Key key,

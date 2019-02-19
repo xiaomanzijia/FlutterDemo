@@ -73,6 +73,8 @@ flutter:
     - images/ic_osc_logo.png
     - images/ic_add_pics.png
 
+    - lib/fluttergo/widget/elements/Form/Button/DropdownButton/demo.dart
+
     - assets/app.db
     - assets/images/
 

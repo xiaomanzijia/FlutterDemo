@@ -18,7 +18,8 @@ class WidgetPage extends StatefulWidget {
 }
 
 // ignore: non_abstract_class_inherits_abstract_member_one
-class SecondPageState extends State<WidgetPage> {
+class SecondPageState extends State<WidgetPage>
+    with AutomaticKeepAliveClientMixin {
   List<Cat> categories = [];
   CatControlModel catModel;
 

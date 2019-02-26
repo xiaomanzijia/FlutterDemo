@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_app_demo/fluttergo/routers/app.dart';
+import 'package:flutter_app_demo/fluttergo/routers/routers.dart';
 import 'package:flutter_app_demo/fluttergo/utils/provider.dart';
 import 'views/home.dart';
 
@@ -11,6 +12,7 @@ var db;
 class MyApp extends StatelessWidget {
   MyApp() {
     final router = new Router();
+    Routes.configureRoutes(router);
     Application.router = router;
   }
 

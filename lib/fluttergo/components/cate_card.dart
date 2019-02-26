@@ -69,10 +69,11 @@ class _CateCardState extends State<CateCard> {
 
   //获取一层目录下的二级内容
   getFirstChildCategoriesByParentId() async {
-    int parendId = widget.category.parentId;
+    int parendId = widget.category.id;
     //构建查询条件
     Cat childCateCondition = new Cat(parentId: parendId);
 
+    print("cat in getFirstChildCategoriesByParentId ${childCateCondition.toMap()}");
     List<Cat> list = await catControl.getList(childCateCondition);
     if (list.isNotEmpty && list.length >= 1 && this.mounted) {
       setState(() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_demo/fluttergo/utils/sql.dart';
 
 abstract class WidgetInterface {
   int get id;
@@ -97,5 +98,44 @@ class WidgetPoint implements WidgetInterface {
 }
 
 class WidgetControlModel {
+  final String table = 'widget';
+  Sql sql;
 
+  WidgetControlModel() {
+    sql = Sql.setTab(table);
+  }
+
+  // 获取Widget不同条件的列表
+  Future<List<WidgetPoint>> getList(WidgetPoint widgetPoint) async {
+    List listJson =
+        await sql.getByCondition(conditions: widgetPoint.toSqlCondition());
+    List<WidgetPoint> widgets = listJson.map((json) {
+      return new WidgetPoint.fromJSON(json);
+    }).toList();
+    // print("widgets $widgets");
+    return widgets;
+  }
+
+  // 通过name获取Cat对象信息
+  Future<WidgetPoint> getCatByName(String name) async {
+    List json = await sql.getByCondition(conditions: {'name': name});
+    if (json.isEmpty) {
+      return null;
+    }
+    return new WidgetPoint.fromJSON(json.first);
+  }
+
+  Future<List<WidgetPoint>> search(String name) async {
+    List json = await sql.search(conditions: {'name': name});
+
+    if (json.isEmpty) {
+      return [];
+    }
+
+    List<WidgetPoint> widgets = json.map((json) {
+      return new WidgetPoint.fromJSON(json);
+    }).toList();
+
+    return widgets;
+  }
 }

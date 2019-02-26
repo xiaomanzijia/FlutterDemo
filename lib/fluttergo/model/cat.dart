@@ -25,7 +25,7 @@ class Cat implements CatInterface {
 
   Cat({this.id, this.name, this.desc, this.depth, this.parentId});
 
-  Cat.formJSON(Map json)
+  Cat.fromJSON(Map json)
       : id = json['id'],
         name = json['name'],
         desc = json['desc'],
@@ -78,9 +78,18 @@ class CatControlModel {
     print("cat in getList ${cat.toMap()}");
     List listJson = await sql.getByCondition(conditions: cat.toSqlConditon());
     List<Cat> cats = listJson.map((json) {
-      return new Cat.formJSON(json);
+      return new Cat.fromJSON(json);
     }).toList();
     print('cat int getList ${cats.toString()}');
     return cats;
+  }
+
+  // 通过name获取Cat对象信息
+  Future<Cat> getCatByName(String name) async {
+    List json = await sql.getByCondition(conditions: {'name': name});
+    if (json.isEmpty) {
+      return null;
+    }
+    return new Cat.fromJSON(json.first);
   }
 }

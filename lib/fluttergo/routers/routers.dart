@@ -19,6 +19,7 @@ class Routes {
     router.define(home, handler: homeHandler);
 
     router.define('/category/:type', handler: categoryHandler);
+    router.define('/category/error/404', handler: widgetNotFoundHandler);
 
     widgetDemoList.forEach((demo) {
       Handler handler = new Handler(handlerFunc:

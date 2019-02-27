@@ -1,5 +1,7 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_demo/fluttergo/components/widget_item.dart';
+import 'package:flutter_app_demo/fluttergo/routers/app.dart';
 import 'package:flutter_app_demo/fluttergo/widget/index.dart';
 
 class WidgetItemContainer extends StatelessWidget {
@@ -35,7 +37,25 @@ class WidgetItemContainer extends StatelessWidget {
               flex: 1,
               child: WidgetItem(
                 title: item.name,
-                onTap: () {},
+                onTap: () {
+                  if (isWidgetPoint) {
+                    String targetName = item.name;
+                    String tartgetRouter = 'category/error/404';
+                    widgetDemosList.forEach((item) {
+                      if (item.name == targetName) {
+                        tartgetRouter = item.routerName;
+                      }
+                    });
+                    print("router---> $tartgetRouter");
+                    Application.router.navigateTo(context, "$tartgetRouter",
+                        transition: TransitionType.inFromRight);
+                  } else {
+                    print("router---> /category/${item.name}");
+                    Application.router.navigateTo(
+                        context, "/category/${item.name}",
+                        transition: TransitionType.inFromRight);
+                  }
+                },
                 index: addI,
                 totalCount: length,
                 rowLength: columnCount,

@@ -1,7 +1,7 @@
 package me.licheng.flutterappdemo2;
 
 import android.content.Context;
-import android.support.multidex.MultiDex;
+import androidx.multidex.MultiDex;
 
 import io.flutter.app.FlutterApplication;
 

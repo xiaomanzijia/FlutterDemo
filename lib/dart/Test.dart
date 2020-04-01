@@ -379,6 +379,90 @@ class Test {
   }
 
   void doSomething() {}
+
+  void print38() {
+    final v = Vector(2, 3);
+    final w = Vector(2, 2);
+
+    print(v + w == Vector(4, 5));
+    print(v - w == Vector(0, 1));
+
+    '42'.padLeft(5);
+  }
+
+  void print39() {
+    print('${Color.red.index == 0}');
+    print('${Color.green.index == 1}');
+    print('${Color.blue.index == 2}');
+
+    var list = Color.values;
+    print('${Color.blue == list[2]}');
+
+    var aColor = Color.blue;
+    switch (aColor) {
+      case Color.blue:
+        print('蓝色');
+        break;
+      case Color.green:
+        print('绿色');
+        break;
+      default: // 没有该语句会出现警告。
+        break;
+    }
+  }
+
+  void print40() {
+    var names = ['Bob', 'Alice'];
+    var nameSet = Set<String>.from(names);
+  }
+}
+
+T first<T>(List<T> list) {
+  T temp = list[0];
+  return temp;
+}
+
+class Musician with Musical {}
+
+mixin Musical on A {
+  bool canPlayPiano = false;
+  bool canCompose = false;
+  bool canConduct = false;
+
+  void entertainMe() {
+    if (canPlayPiano) {
+      print('Playing piano');
+    } else if (canConduct) {
+      print('Waving hands');
+    } else {
+      print('Humming to self');
+    }
+  }
+}
+
+abstract class Cache<T> {
+  T getByKey(String key);
+
+  void setByKey(String key, T value);
+}
+
+enum Color { red, green, blue }
+
+class A with Musical {
+  @override
+  noSuchMethod(Invocation invocation) {
+    print('你尝试使用一个不存在的成员：' + '${invocation.memberName}');
+  }
+}
+
+class Vector {
+  final x, y;
+
+  Vector(this.x, this.y);
+
+  Vector operator +(Vector v) => Vector(x + v.x, y + v.y);
+
+  Vector operator -(Vector v) => Vector(x - v.x, y - v.y);
 }
 
 class Logger {
@@ -500,7 +584,7 @@ class EffectiveDoer extends Doer {
 }
 
 // Person1类的隐式接口中包含greet()方法。
-class Person1{
+class Person1 {
   final _name;
 
   Person1(this._name);
@@ -520,8 +604,7 @@ class Impostor implements Person1 {
 String greetBob(Person1 person) => person.greet('小芳');
 
 class Television {
-  void turnOn() {
-  }
+  void turnOn() {}
 }
 
 class SmartTelevision extends Television {
@@ -532,8 +615,7 @@ class SmartTelevision extends Television {
   }
 }
 
-void doSomething() {
-}
+void doSomething() {}
 
 void main() {
   print(greetBob(Person1('小云')));

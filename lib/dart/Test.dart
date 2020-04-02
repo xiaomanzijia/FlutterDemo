@@ -415,6 +415,10 @@ class Test {
     var names = ['Bob', 'Alice'];
     var nameSet = Set<String>.from(names);
   }
+
+  void print41() {
+
+  }
 }
 
 T first<T>(List<T> list) {
@@ -424,7 +428,7 @@ T first<T>(List<T> list) {
 
 class Musician with Musical {}
 
-mixin Musical on A {
+mixin Musical {
   bool canPlayPiano = false;
   bool canCompose = false;
   bool canConduct = false;
@@ -448,7 +452,7 @@ abstract class Cache<T> {
 
 enum Color { red, green, blue }
 
-class A with Musical {
+class A1 with Musical {
   @override
   noSuchMethod(Invocation invocation) {
     print('你尝试使用一个不存在的成员：' + '${invocation.memberName}');

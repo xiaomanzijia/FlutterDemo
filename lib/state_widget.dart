@@ -1,5 +1,10 @@
 //如何更新widget
 import 'package:flutter/material.dart';
+import 'package:flutter_app_demo/widgets/counter.dart';
+import 'package:flutter_app_demo/widgets/switch.dart';
+import 'package:flutter_app_demo/widgets/tapboxb.dart';
+import 'package:flutter_app_demo/widgets/tapboxc.dart';
+import 'package:flutter_app_demo/widgets/validatetest.dart';
 
 void main() => runApp(new SampleApp());
 
@@ -28,6 +33,15 @@ class _SampleAppPageState extends State<SampleAppPage> {
     setState(() {
       textToShow = "Flutter is Awesome!";
     });
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return new Scaffold(
+        appBar: AppBar(
+          title: Text("Counter Demo"),
+        ),
+        body: FocusTestRoute(),
+      );
+    }));
   }
 
   @override

@@ -2,6 +2,45 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 
+import 'dart:async';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_app_demo/demo/main.dart';
+
+
+Future<String> loadAsset() async {
+  return await rootBundle.loadString('asseets/config.json');
+}
+
+void collectLog(String line) {
+  //收集日志
+}
+
+void reportErrorAndLog(FlutterErrorDetails details) {
+  //上报错误和日志逻辑
+}
+
+FlutterErrorDetails makeDetails(Object obj, StackTrace stack) {
+  //构建错误信息
+}
+
+void handleError() {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    reportErrorAndLog(details);
+  };
+  runZoned(
+          () => runApp(MyApp()),
+      zoneSpecification: ZoneSpecification(
+          print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+            collectLog(line); //收集日志
+          }
+      ),
+      onError: (Object obj, StackTrace stack) {
+        var details = makeDetails(obj, stack);
+        reportErrorAndLog(details);
+      }
+  );
+}
+
 class Test {
   var one = int.parse('1');
   var onePointOne = double.parse('1.1');
@@ -300,11 +339,11 @@ class Test {
     switch (command) {
       case 'CLOSED': // case 语句为空时的 fall-through 形式。
         continue newClosed;
-      // 继续执行标签为 nowClosed 的 case 子句。
+    // 继续执行标签为 nowClosed 的 case 子句。
 
       newClosed:
       case 'NEW_CLOSED':
-        // case 条件值为 CLOSED 和 NOW_CLOSED 时均会执行该语句。
+      // case 条件值为 CLOSED 和 NOW_CLOSED 时均会执行该语句。
         break;
     }
   }
@@ -661,13 +700,12 @@ String say2(String from, String msg,
   return result;
 }
 
-void doStuff(
-    {List<int> list = const [1, 2, 3],
-    Map<String, String> gifts = const {
-      'first': 'paper',
-      'second': 'cotton',
-      'third': 'leather'
-    }}) {
+void doStuff({List<int> list = const [1, 2, 3],
+  Map<String, String> gifts = const {
+    'first': 'paper',
+    'second': 'cotton',
+    'third': 'leather'
+  }}) {
   print('list: $list');
   print('gifts: $gifts');
 }

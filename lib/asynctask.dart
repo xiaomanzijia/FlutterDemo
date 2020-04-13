@@ -87,7 +87,7 @@ class _SampleAppPageState extends State<SampleAppPage> with WidgetsBindingObserv
 
       http.Response response = await http.get(dataURL);
 
-      replyTo.send(JSON.decode(response.body));
+      replyTo.send(json.decode(response.body));
     }
   }
 

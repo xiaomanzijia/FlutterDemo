@@ -1,10 +1,21 @@
 //如何更新widget
 import 'package:flutter/material.dart';
+import 'package:flutter_app_demo/widgets/container.dart';
 import 'package:flutter_app_demo/widgets/counter.dart';
+import 'package:flutter_app_demo/widgets/decorationbox.dart';
+import 'package:flutter_app_demo/widgets/expand.dart';
+import 'package:flutter_app_demo/widgets/flowdelegate.dart';
+import 'package:flutter_app_demo/widgets/grid.dart';
+import 'package:flutter_app_demo/widgets/listtest.dart';
+import 'package:flutter_app_demo/widgets/paddingtest.dart';
+import 'package:flutter_app_demo/widgets/stack.dart';
 import 'package:flutter_app_demo/widgets/switch.dart';
 import 'package:flutter_app_demo/widgets/tapboxb.dart';
 import 'package:flutter_app_demo/widgets/tapboxc.dart';
 import 'package:flutter_app_demo/widgets/validatetest.dart';
+import 'package:flutter_app_demo/widgets/wrap.dart';
+
+import 'widgets/singlechildscrollview.dart';
 
 void main() => runApp(new SampleApp());
 
@@ -39,7 +50,7 @@ class _SampleAppPageState extends State<SampleAppPage> {
         appBar: AppBar(
           title: Text("Counter Demo"),
         ),
-        body: FocusTestRoute(),
+        body: ContainerRoute(),
       );
     }));
   }

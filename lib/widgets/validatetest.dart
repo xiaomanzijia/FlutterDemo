@@ -85,6 +85,47 @@ class _FocusTestRouteState extends State<FocusTestRoute> {
                     ],
                   );
                 },
+              ),
+              //线性布局
+              Builder(
+                builder: (context) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(" hello world "),
+                          Text(" I am Jack ")
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(" hello world "),
+                          Text(" I am Jack ")
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        textDirection: TextDirection.rtl,
+                        children: <Widget>[
+                          Text(" hello world "),
+                          Text(" I am Jack ")
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        verticalDirection: VerticalDirection.up,
+                        children: <Widget>[
+                          Text(" hello world ", style: TextStyle(fontSize: 30.0),),
+                          Text(" I am Jack ")
+                        ],
+                      )
+                    ],
+                  );
+                },
               )
             ],
           ),

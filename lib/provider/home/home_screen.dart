@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_demo/provider/home/filter_button.dart';
+import 'package:flutter_app_demo/provider/home/todo_list_View.dart';
 import 'package:flutter_app_demo/provider/localization.dart';
 import 'package:flutter_app_demo/provider/todo_list_model.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 case _HomeScreenTab.todos:
                 default:
                   //TODO 列表
-                  return Text("22");
+                  return TodoListView(
+                    onRemove: (context, todo) {
+
+                    },
+                  );
               }
             },
           );

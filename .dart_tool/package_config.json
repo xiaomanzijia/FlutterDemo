@@ -260,6 +260,24 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "key_value_store",
+      "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/key_value_store-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
+      "name": "key_value_store_flutter",
+      "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/key_value_store_flutter-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
+      "name": "key_value_store_web",
+      "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/key_value_store_web-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
       "name": "logging",
       "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/logging-0.11.4",
       "packageUri": "lib/",
@@ -398,6 +416,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "rxdart",
+      "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/rxdart-0.23.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
       "name": "shared_preferences",
       "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/shared_preferences-0.4.3",
       "packageUri": "lib/",
@@ -500,6 +524,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "todos_repository_local_storage",
+      "rootUri": "../../todos_repository_local_storage",
+      "packageUri": "lib/",
+      "languageVersion": "2.2"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/typed_data-1.1.6",
       "packageUri": "lib/",
@@ -542,7 +572,7 @@
       "languageVersion": "2.2"
     }
   ],
-  "generated": "2020-04-29T13:21:54.621814Z",
+  "generated": "2020-04-29T16:43:14.743335Z",
   "generator": "pub",
   "generatorVersion": "2.7.0"
 }

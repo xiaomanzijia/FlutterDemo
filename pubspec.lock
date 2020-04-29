@@ -298,6 +298,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.19"
+  key_value_store:
+    dependency: transitive
+    description:
+      name: key_value_store
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
+  key_value_store_flutter:
+    dependency: "direct main"
+    description:
+      name: key_value_store_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
+  key_value_store_web:
+    dependency: "direct main"
+    description:
+      name: key_value_store_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   logging:
     dependency: transitive
     description:
@@ -459,6 +480,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.23.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -573,6 +601,13 @@ packages:
     dependency: "direct main"
     description:
       path: "../todos_repository_core"
+      relative: true
+    source: path
+    version: "0.0.0"
+  todos_repository_local_storage:
+    dependency: "direct main"
+    description:
+      path: "../todos_repository_local_storage"
       relative: true
     source: path
     version: "0.0.0"

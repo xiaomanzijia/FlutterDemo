@@ -1,5 +1,6 @@
 # This is a generated file; do not edit or check into version control.
 flutter_webview_plugin=/Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/flutter_webview_plugin-0.3.10+1/
+key_value_store_flutter=/Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/key_value_store_flutter-1.0.0/
 path_provider=/Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/path_provider-1.6.7/
 path_provider_macos=/Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/path_provider_macos-0.0.4+1/
 shared_preferences=/Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/shared_preferences-0.4.3/

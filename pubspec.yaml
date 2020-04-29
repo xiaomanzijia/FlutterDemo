@@ -21,6 +21,11 @@ dependencies:
   sqflite: ^0.12.1
   flutter_markdown: ^0.2.0
   json_annotation: ^2.0.0
+  provider: ^4.0.4
+  todos_app_core:
+    path: ../todos_app_core
+  todos_repository_core:
+    path: ../todos_repository_core
 
 dev_dependencies:
   build_runner: ^1.0.0

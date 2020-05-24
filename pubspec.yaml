@@ -24,6 +24,7 @@ dependencies:
   provider: ^4.0.4
   key_value_store_flutter:
   key_value_store_web:
+  rxdart: ^0.24.1
   todos_app_core:
     path: ../todos_app_core
   todos_repository_core:

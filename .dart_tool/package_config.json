@@ -417,7 +417,7 @@
     },
     {
       "name": "rxdart",
-      "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/rxdart-0.23.1",
+      "rootUri": "file:///Users/licheng/flutter/.pub-cache/hosted/pub.flutter-io.cn/rxdart-0.24.1",
       "packageUri": "lib/",
       "languageVersion": "2.6"
     },
@@ -572,7 +572,7 @@
       "languageVersion": "2.2"
     }
   ],
-  "generated": "2020-04-29T16:43:14.743335Z",
+  "generated": "2020-05-24T03:32:57.073279Z",
   "generator": "pub",
   "generatorVersion": "2.7.0"
 }

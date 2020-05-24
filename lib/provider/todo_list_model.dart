@@ -60,7 +60,7 @@ class TodoListModel extends ChangeNotifier {
     }).toList();
   }
 
-  void update(Todo todo) {
+  void updateTodo(Todo todo) {
     assert(todo != null);
     assert(todo.id != null);
     var oldTodo = _todos.firstWhere((it) => it.id == todo.id);
@@ -71,6 +71,12 @@ class TodoListModel extends ChangeNotifier {
   }
 
   void _uploadItems() {
-
+    respository.saveTodos(_todos.map((it)=>it.toEntity()).toList());
   }
+
+  int get numCompleted =>
+      todos.where((Todo todo) => todo.complete).toList().length;
+
+  int get numActive =>
+      todos.where((Todo todo) => !todo.complete).toList().length;
 }

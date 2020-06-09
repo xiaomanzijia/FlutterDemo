@@ -125,6 +125,37 @@ void zip3() {
       (a, b, c) => a + b + c).listen(print);
 }
 
+final subject = BehaviorSubject<int>.seeded(1);
+
+void subjectAdd() {
+  subject.add(1);
+  subject.add(2);
+  subject.add(3);
+}
+
+
+final publishSubject = PublishSubject<int>();
+
+
+final replaySubject = ReplaySubject<int>();
+
+
 void main() {
-  zip3();
+//  subject.stream.listen(print);
+//  subjectAdd();
+
+//  publishSubject.stream.listen((value) => print('observer1: $value'));
+//  publishSubject.add(1);
+//  publishSubject.add(2);
+//
+//  publishSubject.stream.listen((value) => print('observer2: $value'));
+//  publishSubject.add(3);
+//  publishSubject.close();
+
+  replaySubject.add(1);
+  replaySubject.add(2);
+  replaySubject.add(3);
+  replaySubject.stream.listen(print);
+  replaySubject.stream.listen(print);
+
 }

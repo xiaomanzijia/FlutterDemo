@@ -32,6 +32,8 @@ dependencies:
   todos_repository_local_storage:
     path: ../todos_repository_local_storage
 
+  vertical_tabs: ^0.2.0
+
 dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^2.0.0

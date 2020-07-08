@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'red_dot_page.dart';
+
 
 Future<void> main() async {
   runApp(MaterialApp(
@@ -73,6 +75,7 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
   PageController _pageController;
   ScrollController _controller;
   ScrollPhysics _physics;
+  final GlobalKey _shopIconKey = GlobalKey();
 
   final _tabs = List.generate(100, (index) => index);
 
@@ -129,13 +132,16 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: <Widget>[
-          Container(
-            color: Colors.yellow,
-            constraints: BoxConstraints.expand(
-                width: 120.0, height: MediaQuery.of(context).size.height),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  color: Colors.yellow,
+                  constraints: BoxConstraints.expand(
+                      width: 120.0, height: MediaQuery.of(context).size.height),
 
 //            child: SingleChildScrollView(
 //              controller: widget._controller,
@@ -150,29 +156,51 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
 //              ),
 //            ),
 
-            child: ListView(
-              controller: _controller,
-              children: _tabs.map((index) => InkWell(
-                onTap: () {
-                  _pageController.jumpToPage(index);
-                },
-                child: Text('Tab$index'),
-              )).toList(),
+                  child: ListView(
+                    controller: _controller,
+                    children: _tabs.map((index) => InkWell(
+                      onTap: () {
+                        _pageController.jumpToPage(index);
+                      },
+                      child: Text('Tab$index'),
+                    )).toList(),
+                  ),
+                ),
+                Container(
+                  constraints: BoxConstraints.expand(
+                      width: MediaQuery.of(context).size.width - 120.0,
+                      height: MediaQuery.of(context).size.height),
+                  child: PageView(
+                    scrollDirection: Axis.vertical,
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: _tabs
+                        .map((tab) => KeepAlivePage(tab, widget._controller, _shopIconKey))
+                        .toList(),
+                  ),
+                ),
+              ],
             ),
           ),
           Container(
-            constraints: BoxConstraints.expand(
-                width: MediaQuery.of(context).size.width - 120.0,
-                height: MediaQuery.of(context).size.height),
-            child: PageView(
-              scrollDirection: Axis.vertical,
-              controller: _pageController,
-              physics: NeverScrollableScrollPhysics(),
-              children: _tabs
-                  .map((tab) => KeepAlivePage(tab, widget._controller))
-                  .toList(),
-            ),
+            height: 1,
+            color: Colors.grey.withOpacity(0.5),
           ),
+          Container(
+            height: 60,
+            color: Colors.white,
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Icon(
+                    Icons.shop_two,
+                    key: _shopIconKey,
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -185,7 +213,10 @@ class KeepAlivePage extends StatefulWidget {
 
   final int _tab;
 
-  KeepAlivePage(this._tab, this._controller);
+  final GlobalKey _shopIconKey;
+
+
+  KeepAlivePage(this._tab, this._controller, this._shopIconKey);
 
   @override
   State<StatefulWidget> createState() => KeepAlivePageState();
@@ -195,15 +226,14 @@ class KeepAlivePage extends StatefulWidget {
 
 class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin implements PositionChangedListener, ViewChangeListener {
 
-  final _datas = List.generate(100, (index) => Text(
-            'item$index',
-            key: GlobalKey(),
-          ));
+  var _datas = [];
   ScrollController _controller;
   GlobalKey listViewKey = new GlobalKey();
   double lastTimePix = 0.0;
   int memoryPosition = 0;
   ScrollPhysics _physics;
+
+  Offset _endOffset;
 
   final _horizonTabs = List.generate(12, (index) => Text('HorizonTab$index'));
   TabController _horizonTabController;
@@ -216,6 +246,53 @@ class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveCli
 
   @override
   void initState() {
+
+    WidgetsBinding.instance.addPostFrameCallback((c) {
+      // 获取「购物车」的位置
+      _endOffset = (widget._shopIconKey.currentContext.findRenderObject() as RenderBox)
+          .localToGlobal(Offset.zero);
+    });
+
+    _datas = List.generate(
+        100,
+        (index) {
+          var key = GlobalKey();
+          return Row(
+            key: GlobalKey(),
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  'item$index',
+                ),
+              ),
+              IconButton(
+                key: key,
+                icon: Icon(
+                  Icons.shop_two,
+                ),
+                onPressed: () {
+
+                  // 点击的时候获取当前 widget 的位置，传入 overlayEntry
+                  var _overlayEntry = OverlayEntry(builder: (_) {
+                    RenderBox box = key.currentContext.findRenderObject();
+                    var offset = box.localToGlobal(Offset.zero);
+                    return RedDotPage(
+                      startPosition: offset,
+                      endPosition: _endOffset,
+                    );
+                  });
+                  // 显示Overlay
+                  Overlay.of(key.currentContext).insert(_overlayEntry);
+                  // 等待动画结束
+                  Future.delayed(Duration(milliseconds: 800), () {
+                    _overlayEntry.remove();
+                    _overlayEntry = null;
+                  });
+                },
+              )
+            ],
+          );
+        });
 
     _horizonTabController =
         TabController(vsync: this, length: _horizonTabs.length);
@@ -291,33 +368,32 @@ class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveCli
             )
           ],
         ),
-        Container(
-          color: Colors.blue,
-          constraints: BoxConstraints.expand(
-              width: MediaQuery.of(context).size.width - 120.0,
-              height: MediaQuery.of(context).size.height - 180.0),
-          child: NotificationListener(
-            child: ListView.builder(
-                physics: _physics,
-                key: listViewKey,
-                cacheExtent: 30.0,
-                itemCount: _datas.length,
+        Expanded(
+          child: Container(
+            color: Colors.blue,
+            child: NotificationListener(
+              child: ListView.builder(
+                  physics: _physics,
+                  key: listViewKey,
+                  cacheExtent: 30.0,
+                  itemCount: _datas.length,
 //                controller: _controller,
-                itemBuilder: (context, index) {
-                  return new LifeCycleWidget(
-                    index: index,
-                    changedListener: this,
-                    child: _datas[index],
-                  );
-                }),
-            onNotification: (ScrollNotification scrollInfo) {
+                  itemBuilder: (context, index) {
+                    return new LifeCycleWidget(
+                      index: index,
+                      changedListener: this,
+                      child: _datas[index],
+                    );
+                  }),
+              onNotification: (ScrollNotification scrollInfo) {
 //              print('滑动方向${scrollInfo.metrics.axisDirection}');
 //              if (scrollInfo.metrics.pixels == scrollInfo.metrics.minScrollExtent) {
 //                print('滑到顶部啦！');
 //              }
-              tabAnimateTo();
-              return true;
-            },
+                tabAnimateTo();
+                return true;
+              },
+            ),
           ),
         )
       ],

@@ -1,14 +1,68 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 
 Future<void> main() async {
   runApp(MaterialApp(
-    home: TabBarPage(),
+    home: ShopDetailPage(),
   ));
 }
 
+class ShopDetailPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _ShopDetailState();
+
+}
+
+class _ShopDetailState extends State<ShopDetailPage> {
+
+  ScrollController _controller;
+
+  @override
+  void initState() {
+    _controller = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: NestedScrollView(
+        controller: _controller,
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            SliverToBoxAdapter(
+              child: Container(
+                constraints: BoxConstraints.expand(
+                    width: MediaQuery.of(context).size.width, height: 120.0),
+                child: Center(
+                  child: Text('店铺详情'),
+                ),
+              ),
+            )
+          ];
+        },
+        body: TabBarPage(_controller),
+      ),
+    );
+  }
+
+}
+
 class TabBarPage extends StatefulWidget {
+
+  final ScrollController _controller;
+
+
+  TabBarPage(this._controller);
+
   @override
   State<StatefulWidget> createState() => TabBarPageState();
 }
@@ -17,6 +71,8 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
 
   TabController _tabController;
   PageController _pageController;
+  ScrollController _controller;
+  ScrollPhysics _physics;
 
   final _tabs = List.generate(100, (index) => index);
 
@@ -24,50 +80,100 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
   void initState() {
     _tabController = TabController(vsync: this, length: _tabs.length);
     _pageController = PageController();
+    _controller = ScrollController();
+//    _physics = NeverScrollableScrollPhysics();
+//    widget._controller.addListener(() {
+//      print('父亲控件滑动监听，滑动距离:${widget._controller.offset}');
+//      if (widget._controller.offset < 120.0) {
+//        print('父亲控件滑动距离111 不可滑动');
+//        _physics = NeverScrollableScrollPhysics();
+//      } else {
+//        print('父亲控件滑动距离111 可滑动');
+//        _physics = null;
+//        if (_controller == null) {
+//          _controller = ScrollController();
+//          _controller?.addListener(() {
+//            if (_controller == null) return;
+//            bool isDownDirection = _controller.position.userScrollDirection == ScrollDirection.forward;
+//            print("左侧ListView滑动距离:${_controller.offset} 是否向下滑动:$isDownDirection");
+//            if (isDownDirection && _controller.offset == 0) {
+//              _controller = null;
+//              setState(() {});
+//            }
+//          });
+//        }
+//      }
+//      setState(() {});
+//    });
+//    _controller?.addListener(() {
+//      if (_controller == null) return;
+//      bool isDownDirection = _controller.position.userScrollDirection == ScrollDirection.forward;
+//      print("左侧ListView滑动距离:${_controller.offset} 是否向下滑动:$isDownDirection");
+//      if (isDownDirection && _controller.offset == 0) {
+//        _controller = null;
+//        setState(() {});
+//      }
+//
+//    });
     super.initState();
   }
 
   @override
   void dispose() {
     _tabController?.dispose();
+    _pageController?.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              color: Colors.yellow,
-              constraints: BoxConstraints.expand(
-                  width: 120.0, height: MediaQuery.of(context).size.height),
-              child: ListView(
-                children: _tabs.map((index) => InkWell(
-                  onTap: () {
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            color: Colors.yellow,
+            constraints: BoxConstraints.expand(
+                width: 120.0, height: MediaQuery.of(context).size.height),
+
+//            child: SingleChildScrollView(
+//              controller: widget._controller,
+//              child: Column(
+//                children: _tabs.map((index) => InkWell(
+//                  onTap: () {
+//                    _pageController.jumpToPage(index);
+//                  },
+//                  child: Text('Tab$index'),
+//                )).toList(),
+//              ),
+//              ),
+//            ),
+
+            child: ListView(
+              controller: _controller,
+              children: _tabs.map((index) => InkWell(
+                onTap: () {
                   _pageController.jumpToPage(index);
-                  },
-                  child: Text('Tab$index'),
-                )).toList(),
-              ),
+                },
+                child: Text('Tab$index'),
+              )).toList(),
             ),
-            Container(
-              constraints: BoxConstraints.expand(
-                  width: MediaQuery.of(context).size.width - 120.0,
-                  height: MediaQuery.of(context).size.height),
-              child: PageView(
-                scrollDirection: Axis.vertical,
-                controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
-                children: _tabs
-                    .map((tab) => KeepAlivePage(tab))
-                    .toList(),
-              ),
+          ),
+          Container(
+            constraints: BoxConstraints.expand(
+                width: MediaQuery.of(context).size.width - 120.0,
+                height: MediaQuery.of(context).size.height),
+            child: PageView(
+              scrollDirection: Axis.vertical,
+              controller: _pageController,
+              physics: NeverScrollableScrollPhysics(),
+              children: _tabs
+                  .map((tab) => KeepAlivePage(tab, widget._controller))
+                  .toList(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -75,9 +181,11 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
 
 class KeepAlivePage extends StatefulWidget {
 
+  final ScrollController _controller;
+
   final int _tab;
 
-  KeepAlivePage(this._tab);
+  KeepAlivePage(this._tab, this._controller);
 
   @override
   State<StatefulWidget> createState() => KeepAlivePageState();
@@ -95,6 +203,7 @@ class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveCli
   GlobalKey listViewKey = new GlobalKey();
   double lastTimePix = 0.0;
   int memoryPosition = 0;
+  ScrollPhysics _physics;
 
   final _horizonTabs = List.generate(12, (index) => Text('HorizonTab$index'));
   TabController _horizonTabController;
@@ -113,42 +222,46 @@ class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveCli
 
     _controller = ScrollController();
     _controller.addListener(() {
-      double chileGlobalPositionY;
-      double chileHeight;
-      //获取ListView在屏幕中的位置
-      double listViewGlobalPositionY = listViewKey.currentContext
+      tabAnimateTo();
+    });
+    super.initState();
+  }
+
+  void tabAnimateTo() {
+    double chileGlobalPositionY;
+    double chileHeight;
+    //获取ListView在屏幕中的位置
+    double listViewGlobalPositionY = listViewKey.currentContext
+        .findRenderObject()
+        .getTransformTo(null)
+        .getTranslation()
+        .y;
+    for (int i = memoryPosition; i <= _datas.length; i++) {
+      if ((_datas[i].key as GlobalKey).currentContext == null) {
+        continue;
+      }
+      //子控件在屏幕中的位置 用于计算第一个可见Item的位置
+      chileGlobalPositionY = (_datas[i].key as GlobalKey)
+          .currentContext
           .findRenderObject()
           .getTransformTo(null)
           .getTranslation()
           .y;
-      for (int i = memoryPosition; i <= _datas.length; i++) {
-        if ((_datas[i].key as GlobalKey).currentContext == null) {
-          continue;
-        }
-        //子控件在屏幕中的位置 用于计算第一个可见Item的位置
-        chileGlobalPositionY = (_datas[i].key as GlobalKey)
-            .currentContext
-            .findRenderObject()
-            .getTransformTo(null)
-            .getTranslation()
-            .y;
-        //控件高度 用于计算第一个可见Item的位置
-        chileHeight = (_datas[i].key as GlobalKey)
-            .currentContext
-            .findRenderObject()
-            .paintBounds
-            .size
-            .height;
-        //如果在屏幕中可见
-        if (chileGlobalPositionY + chileHeight > listViewGlobalPositionY) {
-          var index = i ~/ 10;
-          print("第一个可见的item is $i tab滚动到index:$index}");
-          _horizonTabController.animateTo(i ~/ 10);
-          break;
-        }
+      //控件高度 用于计算第一个可见Item的位置
+      chileHeight = (_datas[i].key as GlobalKey)
+          .currentContext
+          .findRenderObject()
+          .paintBounds
+          .size
+          .height;
+      //如果在屏幕中可见
+      if (chileGlobalPositionY + chileHeight > listViewGlobalPositionY) {
+        var index = i ~/ 10;
+//        print("第一个可见的item is $i tab滚动到index:$index}");
+        _horizonTabController.animateTo(i ~/ 10);
+        break;
       }
-    });
-    super.initState();
+    }
   }
 
   @override
@@ -182,19 +295,30 @@ class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveCli
           color: Colors.blue,
           constraints: BoxConstraints.expand(
               width: MediaQuery.of(context).size.width - 120.0,
-              height: MediaQuery.of(context).size.height - 60.0),
-          child: ListView.builder(
-              key: listViewKey,
-              cacheExtent: 30.0,
-              itemCount: _datas.length,
-              controller: _controller,
-              itemBuilder: (context, index) {
-                return new LifeCycleWidget(
-                  index: index,
-                  changedListener: this,
-                  child: _datas[index],
-                );
-              }),
+              height: MediaQuery.of(context).size.height - 180.0),
+          child: NotificationListener(
+            child: ListView.builder(
+                physics: _physics,
+                key: listViewKey,
+                cacheExtent: 30.0,
+                itemCount: _datas.length,
+//                controller: _controller,
+                itemBuilder: (context, index) {
+                  return new LifeCycleWidget(
+                    index: index,
+                    changedListener: this,
+                    child: _datas[index],
+                  );
+                }),
+            onNotification: (ScrollNotification scrollInfo) {
+//              print('滑动方向${scrollInfo.metrics.axisDirection}');
+//              if (scrollInfo.metrics.pixels == scrollInfo.metrics.minScrollExtent) {
+//                print('滑到顶部啦！');
+//              }
+              tabAnimateTo();
+              return true;
+            },
+          ),
         )
       ],
     );
@@ -217,7 +341,7 @@ class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveCli
   void onWidgetDispose(int index) {
     if(index == memoryPosition){
       memoryPosition ++;
-      print("onWidgetDispose memoryPosition is $memoryPosition");
+//      print("onWidgetDispose memoryPosition is $memoryPosition");
     }
   }
 
@@ -225,7 +349,7 @@ class KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveCli
   void onWidgetInit(int index) {
     if(index<memoryPosition){
       memoryPosition = index;
-      print("onWidgetInit memoryPosition is $memoryPosition");
+//      print("onWidgetInit memoryPosition is $memoryPosition");
     }
   }
 }
@@ -241,9 +365,9 @@ class LifeCycleWidget extends StatefulWidget{
   final PositionChangedListener changedListener;
 
   LifeCycleWidget({
-    @required this.child,
-    @required this.index,
-    @required this.changedListener,
+    this.child,
+    this.index,
+    this.changedListener,
   });
 
   @override

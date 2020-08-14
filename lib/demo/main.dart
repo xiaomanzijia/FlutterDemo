@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 import 'contact_picker.dart';
@@ -32,10 +34,23 @@ class _MyAppState extends State<MyApp> {
                 color: Colors.blue,
                 child: new Text('CLICK ME'),
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  setState(() {
-                    _contact = contact;
-                  });
+//                  Contact contact = await _contactPicker.selectContact();
+//                  setState(() {
+//                    _contact = contact;
+//                  });
+                  int initIndex = 0;
+                  List list = [1, 2, 3, 4, 5, 6];
+                  Map<int, String> map;
+                  map = HashMap.fromIterable(list,
+                      key: (data) => data, value: (data) => 'loading');
+                  print('map:$map');
+
+                  var previousList = list.sublist(0, initIndex).reversed.toList();
+                  var nextList = list.sublist(initIndex, list.length);
+                  print('previousList:$previousList  nextList:$nextList');
+
+                  request(previousList, map);
+                  request(nextList, map);
                 }),
             new Text(
                 _contact == null ? 'No Contact selected.' : _contact.toString())
@@ -43,5 +58,17 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     ));
+  }
+
+  Future request(List list, Map<int, String> map) async {
+    if(list?.isEmpty ?? true) return null;
+    do {
+      await Future.delayed(Duration(seconds: 1), () {
+        print('data:${list[0]}');
+        map[list[0]] = '${list[0]}';
+        print('map:$map');
+        list.removeAt(0);
+      });
+    } while (list.isNotEmpty);
   }
 }
